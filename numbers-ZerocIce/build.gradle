@@ -1,66 +1,41 @@
+/*
+ * Build configuration for ZeroC Ice numbers project
+ */
+
 plugins {
     id 'com.zeroc.gradle.ice-builder.slice' version '1.5.0' apply false
 }
 
 subprojects {
-    //
-    // Apply Java and Ice Builder plug-ins to all sub-projects
-    //
     apply plugin: 'java'
     apply plugin: 'com.zeroc.gradle.ice-builder.slice'
-    
-    //
-    // Use Ice JAR files from maven central repository
-    //
+    apply plugin: 'application'
+
     repositories {
         mavenCentral()
     }
-    
-    //
-    // Both Client and Server depend only on Ice JAR
-    //
+
     dependencies {
         implementation 'com.zeroc:ice:3.7.10'
     }
-    
-    //
-    // Configure Slice compilation
-    //
+
+    // Configuración para compilación de Slice
     slice {
         java {
             files = [file("../numbers-ZerocIce.ice")]
-            // Generar en el directorio estándar de generated sources
-            srcDir = "build/generated/src/main/slice"
         }
     }
-    
-    //
-    // Configure source sets to include generated sources
-    //
-    sourceSets {
-        main {
-            java {
-                srcDirs = ['src/main/java', 'build/generated/src/main/slice']
-            }
-        }
-    }
-    
-    //
-    // Create a JAR file with the appropriate Main-Class and Class-Path attributes
-    //
+
+    // Configurar el JAR con manifest apropiado
     jar {
         manifest {
             attributes(
-               "Main-Class": project.name.capitalize(),
-               "Class-Path": configurations.runtimeClasspath.resolve().collect { it.toURI() }.join(' ')
+                "Main-Class": project.name.capitalize(),
+                "Class-Path": configurations.runtimeClasspath.resolve().collect { it.toURI() }.join(' ')
             )
         }
     }
-    
-    //
-    // Ensure Slice compilation happens before Java compilation
-    //
-    tasks.matching { it.name == 'compileJava' }.all {
-        dependsOn tasks.matching { it.name.contains('slice') || it.name.contains('Slice') }
-    }
+
+    // Asegurar que compileJava dependa de sliceCompile
+    compileJava.dependsOn sliceCompile
 }
