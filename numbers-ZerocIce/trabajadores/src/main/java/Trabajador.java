@@ -39,7 +39,7 @@ public class Trabajador extends Worker {
             
             return resultado;
             
-        } catch (Exception e) {
+        } catch (java.lang.Exception e) {
             System.err.println("Error durante el procesamiento: " + e.getMessage());
             throw new RangeError("Error interno del trabajador: " + e.getMessage());
         } finally {
@@ -155,7 +155,7 @@ public class Trabajador extends Worker {
                 } else {
                     System.err.println("No se pudo conectar con el Maestro");
                 }
-            } catch (Exception e) {
+            } catch (java.lang.Exception e) {
                 System.err.println("Error al registrarse con el Maestro: " + e.getMessage());
                 System.out.println("El trabajador continuará ejecutándose, pero no estará registrado");
             }
@@ -165,14 +165,14 @@ public class Trabajador extends Worker {
             // Esperar hasta que se cierre el comunicador
             communicator.waitForShutdown();
             
-        } catch (Exception e) {
+        } catch (java.lang.Exception e) {
             System.err.println("Error en el trabajador: " + e.getMessage());
             e.printStackTrace();
         } finally {
             if (communicator != null) {
                 try {
                     communicator.destroy();
-                } catch (Exception e) {
+                } catch (java.lang.Exception e) {
                     System.err.println("Error al cerrar el comunicador: " + e.getMessage());
                 }
             }

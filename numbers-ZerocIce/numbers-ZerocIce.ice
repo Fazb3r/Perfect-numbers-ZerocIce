@@ -22,6 +22,9 @@ module NumbersApp
         bool isAvailable();
     };
     
+    // Sequence definition for worker IDs
+    sequence<int> IntSequence;
+    
     // Interfaz del maestro que coordina el trabajo
     interface Master
     {
@@ -38,7 +41,7 @@ module NumbersApp
         string getSystemStats();
         
         // Obtiene la lista de trabajadores activos
-        sequence<int> getActiveWorkers();
+        IntSequence getActiveWorkers();
     };
     
     // Callback para notificar al cliente sobre el progreso

@@ -63,27 +63,27 @@ public class Cliente {
                     try {
                         String stats = maestro.getSystemStats();
                         System.out.println("Estadísticas del sistema: " + stats);
-                    } catch (Exception e) {
+                    } catch (java.lang.Exception e) {
                         System.out.println("No se pudieron obtener estadísticas: " + e.getMessage());
                     }
                     
                 } catch (RangeError e) {
                     System.err.println("Error de rango: " + e.reason);
-                } catch (Exception e) {
+                } catch (java.lang.Exception e) {
                     System.err.println("Error durante el procesamiento: " + e.getMessage());
                 }
             }
             
             scanner.close();
             
-        } catch (Exception e) {
+        } catch (java.lang.Exception e) {
             System.err.println("Error fatal en el cliente: " + e.getMessage());
             e.printStackTrace();
         } finally {
             if (communicator != null) {
                 try {
                     communicator.destroy();
-                } catch (Exception e) {
+                } catch (java.lang.Exception e) {
                     System.err.println("Error al cerrar el comunicador: " + e.getMessage());
                 }
             }
