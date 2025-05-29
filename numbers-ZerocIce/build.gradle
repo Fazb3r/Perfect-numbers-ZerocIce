@@ -10,28 +10,6 @@ subprojects {
     apply plugin: 'com.zeroc.gradle.ice-builder.slice'
     
     //
-    // Configure Slice compilation
-    //
-    slice {
-        java {
-            files = [file("../numbers-ZerocIce.ice")]
-            // Generar en el directorio estándar de generated sources
-            srcDir = "build/generated/src/main/java"
-        }
-    }
-    
-    //
-    // Configure source sets to include generated sources
-    //
-    sourceSets {
-        main {
-            java {
-                srcDirs = ['src/main/java', 'build/generated/src/main/java']
-            }
-        }
-    }
-    
-    //
     // Use Ice JAR files from maven central repository
     //
     repositories {
@@ -43,6 +21,28 @@ subprojects {
     //
     dependencies {
         implementation 'com.zeroc:ice:3.7.10'
+    }
+    
+    //
+    // Configure Slice compilation
+    //
+    slice {
+        java {
+            files = [file("../numbers-ZerocIce.ice")]
+            // Generar en el directorio estándar de generated sources
+            srcDir = "build/generated/src/main/slice"
+        }
+    }
+    
+    //
+    // Configure source sets to include generated sources
+    //
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/main/java', 'build/generated/src/main/slice']
+            }
+        }
     }
     
     //
@@ -60,5 +60,7 @@ subprojects {
     //
     // Ensure Slice compilation happens before Java compilation
     //
-    compileJava.dependsOn sliceCompile
+    tasks.matching { it.name == 'compileJava' }.all {
+        dependsOn tasks.matching { it.name.contains('slice') || it.name.contains('Slice') }
+    }
 }
