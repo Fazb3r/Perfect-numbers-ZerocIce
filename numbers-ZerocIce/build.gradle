@@ -1,32 +1,50 @@
 plugins {
     id 'com.zeroc.gradle.ice-builder.slice' version '1.5.0' apply false
 }
+
 subprojects {
     //
     // Apply Java and Ice Builder plug-ins to all sub-projects
     //
     apply plugin: 'java'
     apply plugin: 'com.zeroc.gradle.ice-builder.slice'
+    
     //
-    // Both Client and Server projects share the Printer.ice Slice definitions
+    // Configure Slice compilation
     //
     slice {
         java {
             files = [file("../numbers-ZerocIce.ice")]
+            // Generar en el directorio estándar de generated sources
+            srcDir = "build/generated/src/main/java"
         }
     }
+    
+    //
+    // Configure source sets to include generated sources
+    //
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/main/java', 'build/generated/src/main/java']
+            }
+        }
+    }
+    
     //
     // Use Ice JAR files from maven central repository
     //
     repositories {
         mavenCentral()
     }
+    
     //
     // Both Client and Server depend only on Ice JAR
     //
     dependencies {
-        implementation 'com.zeroc:ice:3.7.2'
+        implementation 'com.zeroc:ice:3.7.10'
     }
+    
     //
     // Create a JAR file with the appropriate Main-Class and Class-Path attributes
     //
@@ -38,4 +56,9 @@ subprojects {
             )
         }
     }
+    
+    //
+    // Ensure Slice compilation happens before Java compilation
+    //
+    compileJava.dependsOn sliceCompile
 }
