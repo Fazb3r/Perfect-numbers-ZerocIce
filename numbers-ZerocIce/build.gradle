@@ -8,21 +8,33 @@ plugins {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'application'  // Agregar esto
     apply plugin: 'com.zeroc.gradle.ice-builder.slice'
-    apply plugin: 'application'
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        implementation 'com.zeroc:ice:3.7.10'
+        implementation 'com.zeroc:ice:3.7.10'  // Versión más reciente
     }
 
-    // Configuración para compilación de Slice
+    // Configuración para compilación de Slice - CORREGIDA
     slice {
         java {
-            files = [file("../numbers-ZerocIce.ice")]
+            // Cambiar la ruta - el archivo debe estar en la raíz del proyecto
+            files = [file("${rootProject.projectDir}/numbers-ZerocIce.ice")]
+            outputDir = file("${project.buildDir}/generated/src/main/java")
+        }
+    }
+    
+    // Agregar el directorio generado al sourceset
+    sourceSets {
+        main {
+            java {
+                srcDir "${project.buildDir}/generated/src/main/java"
+                srcDir "src/main/java"
+            }
         }
     }
 
@@ -30,12 +42,15 @@ subprojects {
     jar {
         manifest {
             attributes(
-                "Main-Class": project.name.capitalize(),
-                "Class-Path": configurations.runtimeClasspath.resolve().collect { it.toURI() }.join(' ')
+                "Main-Class": project.name.capitalize()
             )
         }
     }
 
-    // Asegurar que compileJava dependa de sliceCompile
-    compileJava.dependsOn sliceCompile
+    // Configurar dependencias después de la evaluación
+    afterEvaluate {
+        if (tasks.findByName('sliceCompile')) {
+            compileJava.dependsOn sliceCompile
+        }
+    }
 }
