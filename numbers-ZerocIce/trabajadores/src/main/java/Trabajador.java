@@ -1,7 +1,7 @@
 import NumbersApp.*;
 import com.zeroc.Ice.*;
 
-public class Trabajador extends Worker {
+public class Trabajador implements Worker {
     
     private int workerId;
     private boolean disponible;
@@ -12,7 +12,6 @@ public class Trabajador extends Worker {
         System.out.println("Trabajador " + workerId + " inicializado");
     }
     
-    @Override
     public long processRange(int startNum, int endNum, Current current) throws RangeError {
         System.out.println("\n=== TRABAJADOR " + workerId + " PROCESANDO ===");
         System.out.println("Rango asignado: [" + startNum + ", " + endNum + "]");
@@ -39,7 +38,7 @@ public class Trabajador extends Worker {
             
             return resultado;
             
-        } catch (java.lang.Exception e) {
+        } catch (Exception e) {
             System.err.println("Error durante el procesamiento: " + e.getMessage());
             throw new RangeError("Error interno del trabajador: " + e.getMessage());
         } finally {
@@ -47,12 +46,10 @@ public class Trabajador extends Worker {
         }
     }
     
-    @Override
     public int getWorkerId(Current current) {
         return workerId;
     }
     
-    @Override
     public boolean isAvailable(Current current) {
         return disponible;
     }
@@ -155,7 +152,7 @@ public class Trabajador extends Worker {
                 } else {
                     System.err.println("No se pudo conectar con el Maestro");
                 }
-            } catch (java.lang.Exception e) {
+            } catch (Exception e) {
                 System.err.println("Error al registrarse con el Maestro: " + e.getMessage());
                 System.out.println("El trabajador continuará ejecutándose, pero no estará registrado");
             }
@@ -165,14 +162,14 @@ public class Trabajador extends Worker {
             // Esperar hasta que se cierre el comunicador
             communicator.waitForShutdown();
             
-        } catch (java.lang.Exception e) {
+        } catch (Exception e) {
             System.err.println("Error en el trabajador: " + e.getMessage());
             e.printStackTrace();
         } finally {
             if (communicator != null) {
                 try {
                     communicator.destroy();
-                } catch (java.lang.Exception e) {
+                } catch (Exception e) {
                     System.err.println("Error al cerrar el comunicador: " + e.getMessage());
                 }
             }
