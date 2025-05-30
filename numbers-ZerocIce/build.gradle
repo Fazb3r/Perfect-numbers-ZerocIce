@@ -5,27 +5,22 @@ plugins {
 
 repositories {
     mavenCentral()
-    gradlePluginPortal()
+    maven {
+        url 'https://repo.zeroc.com/nexus/content/repositories/releases/'
+    }
 }
 
 dependencies {
-    // Try different Ice version
-    implementation 'com.zeroc:ice:3.7.+'
-    
-    // Or specify exact version known to work
-    implementation 'com.zeroc:ice:3.7.9'
-    
-    // Include Slice runtime if needed
-    implementation 'com.zeroc:slice:3.7.10'
+    // Ice dependencies
+    implementation 'com.zeroc:ice:3.7.10'
 }
 
-// If you're using Ice with specific Java version
+application {
+    mainClass = 'your.main.Class' // Replace with your actual main class
+}
+
+// Remove Java toolchain configuration - let Gradle use system default
+// This will use whatever Java version you have installed
 compileJava {
-    options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
-    }
+    options.encoding = 'UTF-8'
 }
