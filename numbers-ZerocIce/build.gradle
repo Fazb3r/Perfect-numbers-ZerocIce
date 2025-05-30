@@ -1,62 +1,31 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://repo.zeroc.com/nexus/content/repositories/releases"
-        }
-    }
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
 }
 
-// Configure source sets to include generated ICE classes
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java', '.']  // Include root directory
-            include 'NumbersApp/**/*.java'    // Include generated classes
-        }
-    }
+dependencies {
+    // Try different Ice version
+    implementation 'com.zeroc:ice:3.7.+'
+    
+    // Or specify exact version known to work
+    implementation 'com.zeroc:ice:3.7.9'
+    
+    // Include Slice runtime if needed
+    implementation 'com.zeroc:slice:3.7.10'
 }
 
-subprojects {
-    apply plugin: 'java'
-    
-    java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    
-    // Add the generated classes to each subproject's source sets
-    sourceSets {
-        main {
-            java {
-                srcDirs += rootProject.projectDir  // Include root directory
-                include 'NumbersApp/**/*.java'
-            }
-        }
-    }
-    
-    dependencies {
-        implementation 'com.zeroc:ice:3.7.10'
-        implementation 'com.zeroc:glacier2:3.7.10'
-        implementation 'com.zeroc:icestorm:3.7.10'
-        implementation 'com.zeroc:icelocatordiscovery:3.7.10'
-        implementation 'com.zeroc:icepatch2:3.7.10'
-    }
-    
-    compileJava {
-        options.encoding = 'UTF-8'
-    }
+// If you're using Ice with specific Java version
+compileJava {
+    options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
 }
 
-// Configuración específica para proyectos de aplicación
-configure(subprojects.findAll { it.name in ['maestro', 'cliente', 'trabajador'] }) {
-    apply plugin: 'application'
-    
-    run {
-        standardInput = System.in
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
     }
 }
