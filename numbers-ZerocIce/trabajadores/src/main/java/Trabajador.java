@@ -1,5 +1,7 @@
 import NumbersApp.*;
 import com.zeroc.Ice.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Trabajador implements Worker {
     
@@ -28,13 +30,20 @@ public class Trabajador implements Worker {
         long startTime = System.currentTimeMillis();
         
         try {
-            // Por ahora, simular procesamiento básico
-            // En una implementación real, aquí iría la lógica de números perfectos
-            long resultado = calcularSumaRango(startNum, endNum);
+            // Buscar números perfectos en el rango
+            List<Integer> numerosPerfectos = buscarNumerosPerfectos(startNum, endNum);
+            
+            // Calcular resultado: suma de todos los números perfectos encontrados
+            long resultado = 0;
+            for (int numeroPerfecto : numerosPerfectos) {
+                resultado += numeroPerfecto;
+            }
             
             long endTime = System.currentTimeMillis();
             System.out.println("Trabajador " + workerId + " completó el procesamiento");
-            System.out.println("Resultado: " + resultado);
+            System.out.println("Números perfectos encontrados: " + numerosPerfectos);
+            System.out.println("Cantidad: " + numerosPerfectos.size());
+            System.out.println("Suma total: " + resultado);
             System.out.println("Tiempo: " + (endTime - startTime) + " ms");
             
             return resultado;
@@ -58,45 +67,42 @@ public class Trabajador implements Worker {
     }
     
     /**
-     * Método auxiliar para calcular la suma de un rango
-     * (Placeholder para la lógica de números perfectos)
+     * Buscar todos los números perfectos en un rango dado
      */
-    private long calcularSumaRango(int inicio, int fin) {
-        long suma = 0;
+    private List<Integer> buscarNumerosPerfectos(int inicio, int fin) {
+        List<Integer> numerosPerfectos = new ArrayList<>();
         
-        System.out.println("Calculando suma para rango [" + inicio + ", " + fin + "]");
+        System.out.println("Buscando números perfectos en rango [" + inicio + ", " + fin + "]");
         
-        // Simular trabajo computacional
         for (int i = inicio; i <= fin; i++) {
-            suma += i;
+            if (esNumeroPerfecto(i)) {
+                numerosPerfectos.add(i);
+                System.out.println("¡Número perfecto encontrado: " + i + "!");
+            }
             
-            // Simular trabajo pesado ocasionalmente
-            if (i % 1000 == 0) {
-                try {
-                    Thread.sleep(1); // Simular carga computacional
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
+            // Mostrar progreso cada 1000 números para rangos grandes
+            if (i % 1000 == 0 && i > inicio) {
+                System.out.println("Progreso: verificando número " + i + "...");
             }
         }
         
-        return suma;
+        return numerosPerfectos;
     }
     
     /**
      * Método para verificar si un número es perfecto
-     * (Para implementar en funcionalidades futuras)
+     * Un número perfecto es igual a la suma de sus divisores propios
      */
     private boolean esNumeroPerfecto(int numero) {
         if (numero <= 1) return false;
         
-        int sumaDivisores = 1; // 1 siempre es divisor
+        int sumaDivisores = 1; // 1 siempre es divisor propio
         
-        // Buscar divisores hasta la raíz cuadrada
+        // Buscar divisores hasta la raíz cuadrada para eficiencia
         for (int i = 2; i * i <= numero; i++) {
             if (numero % i == 0) {
                 sumaDivisores += i;
+                
                 // Si i es divisor, numero/i también lo es (excepto si i = sqrt(numero))
                 if (i != numero / i) {
                     sumaDivisores += numero / i;
@@ -105,6 +111,41 @@ public class Trabajador implements Worker {
         }
         
         return sumaDivisores == numero;
+    }
+    
+    /**
+     * Método auxiliar para obtener todos los divisores de un número (para debugging)
+     */
+    private List<Integer> obtenerDivisores(int numero) {
+        List<Integer> divisores = new ArrayList<>();
+        if (numero <= 0) return divisores;
+        
+        divisores.add(1); // 1 siempre es divisor
+        
+        for (int i = 2; i * i <= numero; i++) {
+            if (numero % i == 0) {
+                divisores.add(i);
+                if (i != numero / i) {
+                    divisores.add(numero / i);
+                }
+            }
+        }
+        
+        divisores.sort(Integer::compareTo);
+        return divisores;
+    }
+    
+    /**
+     * Método para mostrar información detallada de un número perfecto (para debugging)
+     */
+    private void mostrarInfoNumeroPerfecto(int numero) {
+        if (esNumeroPerfecto(numero)) {
+            List<Integer> divisores = obtenerDivisores(numero);
+            int suma = divisores.stream().mapToInt(Integer::intValue).sum();
+            System.out.println("Número " + numero + " es perfecto:");
+            System.out.println("  Divisores propios: " + divisores);
+            System.out.println("  Suma de divisores: " + suma);
+        }
     }
     
     public static void main(String[] args) {
@@ -139,6 +180,7 @@ public class Trabajador implements Worker {
             
             System.out.println("=== TRABAJADOR " + workerId + " INICIADO ===");
             System.out.println("Escuchando en puerto " + puerto);
+            System.out.println("Especializado en búsqueda de NÚMEROS PERFECTOS");
             
             // Registrarse con el maestro
             try {
@@ -152,6 +194,14 @@ public class Trabajador implements Worker {
                     
                     maestro.registerWorker(workerProxy);
                     System.out.println("Registrado exitosamente con el Maestro");
+                    
+                    // Mostrar algunos números perfectos conocidos para referencia
+                    System.out.println("\nNúmeros perfectos conocidos:");
+                    System.out.println("- 6 (1+2+3=6)");
+                    System.out.println("- 28 (1+2+4+7+14=28)");
+                    System.out.println("- 496 (suma de divisores propios)");
+                    System.out.println("- 8128 (suma de divisores propios)");
+                    
                 } else {
                     System.err.println("No se pudo conectar con el Maestro");
                 }
@@ -163,7 +213,7 @@ public class Trabajador implements Worker {
                 System.out.println("El trabajador continuará ejecutándose, pero no estará registrado");
             }
             
-            System.out.println("Trabajador listo para recibir tareas...");
+            System.out.println("Trabajador listo para recibir tareas de búsqueda de números perfectos...");
             
             // Esperar hasta que se cierre el comunicador
             communicator.waitForShutdown();
