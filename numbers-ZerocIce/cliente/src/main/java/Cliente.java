@@ -63,12 +63,16 @@ public class Cliente {
                     try {
                         String stats = maestro.getSystemStats();
                         System.out.println("Estadísticas del sistema: " + stats);
+                    } catch (com.zeroc.Ice.Exception e) {
+                        System.out.println("No se pudieron obtener estadísticas (Error ICE): " + e.getMessage());
                     } catch (java.lang.Exception e) {
                         System.out.println("No se pudieron obtener estadísticas: " + e.getMessage());
                     }
                     
                 } catch (RangeError e) {
                     System.err.println("Error de rango: " + e.reason);
+                } catch (com.zeroc.Ice.Exception e) {
+                    System.err.println("Error ICE durante el procesamiento: " + e.getMessage());
                 } catch (java.lang.Exception e) {
                     System.err.println("Error durante el procesamiento: " + e.getMessage());
                 }
@@ -76,6 +80,9 @@ public class Cliente {
             
             scanner.close();
             
+        } catch (com.zeroc.Ice.Exception e) {
+            System.err.println("Error ICE fatal en el cliente: " + e.getMessage());
+            e.printStackTrace();
         } catch (java.lang.Exception e) {
             System.err.println("Error fatal en el cliente: " + e.getMessage());
             e.printStackTrace();

@@ -1,0 +1,14 @@
+// Proyecto para las clases generadas por slice2java
+plugins {
+    id 'java-library'
+}
+
+// Las clases generadas están en la raíz del proyecto
+sourceSets {
+    main {
+        java {
+            srcDirs = ['..']  // Directorio raíz donde están NumbersApp_*.java
+            include 'NumbersApp/**/*.java'  // Solo incluir las clases generadas
+        }
+    }
+}

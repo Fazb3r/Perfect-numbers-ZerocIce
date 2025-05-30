@@ -23,7 +23,7 @@ public class Maestro implements Master {
             System.out.println("Trabajador registrado con ID: " + workerId);
             System.out.println("Total de trabajadores activos: " + trabajadores.size());
             
-        } catch (Exception e) {
+        } catch (java.lang.Exception e) {
             System.err.println("Error al registrar trabajador: " + e.getMessage());
         }
     }
@@ -90,8 +90,11 @@ public class Maestro implements Master {
                 
                 System.out.println("Trabajador " + (i + 1) + " completó su tarea. Resultado parcial: " + resultadoParcial);
                 
-            } catch (Exception e) {
-                System.err.println("Error al comunicarse con trabajador " + (i + 1) + ": " + e.getMessage());
+            } catch (com.zeroc.Ice.Exception e) {
+                System.err.println("Error ICE al comunicarse con trabajador " + (i + 1) + ": " + e.getMessage());
+                // En una implementación más robusta, se podría reasignar el trabajo
+            } catch (java.lang.Exception e) {
+                System.err.println("Error general al comunicarse con trabajador " + (i + 1) + ": " + e.getMessage());
                 // En una implementación más robusta, se podría reasignar el trabajo
             }
             
@@ -147,14 +150,17 @@ public class Maestro implements Master {
             // Esperar hasta que se cierre el comunicador
             communicator.waitForShutdown();
             
-        } catch (Exception e) {
-            System.err.println("Error en el maestro: " + e.getMessage());
+        } catch (com.zeroc.Ice.Exception e) {
+            System.err.println("Error ICE en el maestro: " + e.getMessage());
+            e.printStackTrace();
+        } catch (java.lang.Exception e) {
+            System.err.println("Error general en el maestro: " + e.getMessage());
             e.printStackTrace();
         } finally {
             if (communicator != null) {
                 try {
                     communicator.destroy();
-                } catch (Exception e) {
+                } catch (java.lang.Exception e) {
                     System.err.println("Error al cerrar el comunicador: " + e.getMessage());
                 }
             }
