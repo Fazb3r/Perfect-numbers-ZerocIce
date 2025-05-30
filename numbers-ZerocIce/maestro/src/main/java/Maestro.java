@@ -3,7 +3,7 @@ import com.zeroc.Ice.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Maestro extends Master {
+public class Maestro implements Master {
     
     // Lista de trabajadores registrados
     private Map<Integer, WorkerPrx> trabajadores;
@@ -23,7 +23,7 @@ public class Maestro extends Master {
             System.out.println("Trabajador registrado con ID: " + workerId);
             System.out.println("Total de trabajadores activos: " + trabajadores.size());
             
-        } catch (java.lang.Exception e) {
+        } catch (Exception e) {
             System.err.println("Error al registrar trabajador: " + e.getMessage());
         }
     }
@@ -90,7 +90,7 @@ public class Maestro extends Master {
                 
                 System.out.println("Trabajador " + (i + 1) + " completó su tarea. Resultado parcial: " + resultadoParcial);
                 
-            } catch (java.lang.Exception e) {
+            } catch (Exception e) {
                 System.err.println("Error al comunicarse con trabajador " + (i + 1) + ": " + e.getMessage());
                 // En una implementación más robusta, se podría reasignar el trabajo
             }
@@ -147,14 +147,14 @@ public class Maestro extends Master {
             // Esperar hasta que se cierre el comunicador
             communicator.waitForShutdown();
             
-        } catch (java.lang.Exception e) {
+        } catch (Exception e) {
             System.err.println("Error en el maestro: " + e.getMessage());
             e.printStackTrace();
         } finally {
             if (communicator != null) {
                 try {
                     communicator.destroy();
-                } catch (java.lang.Exception e) {
+                } catch (Exception e) {
                     System.err.println("Error al cerrar el comunicador: " + e.getMessage());
                 }
             }

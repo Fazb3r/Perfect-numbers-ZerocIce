@@ -12,6 +12,7 @@ public class Trabajador implements Worker {
         System.out.println("Trabajador " + workerId + " inicializado");
     }
     
+    @Override
     public long processRange(int startNum, int endNum, Current current) throws RangeError {
         System.out.println("\n=== TRABAJADOR " + workerId + " PROCESANDO ===");
         System.out.println("Rango asignado: [" + startNum + ", " + endNum + "]");
@@ -46,10 +47,12 @@ public class Trabajador implements Worker {
         }
     }
     
+    @Override
     public int getWorkerId(Current current) {
         return workerId;
     }
     
+    @Override
     public boolean isAvailable(Current current) {
         return disponible;
     }
