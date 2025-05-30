@@ -1,14 +1,18 @@
-// Proyecto para las clases generadas por slice2java
 plugins {
     id 'java-library'
 }
 
-// Las clases generadas están en la raíz del proyecto
+// Configure to use the ICE classes from root directory
 sourceSets {
     main {
         java {
-            srcDirs = ['..']  // Directorio raíz donde están NumbersApp_*.java
-            include 'NumbersApp/**/*.java'  // Solo incluir las clases generadas
+            srcDirs = [rootProject.projectDir]
+            include 'NumbersApp/**/*.java'
         }
     }
+}
+
+// Make sure the classes are available to other projects
+jar {
+    from sourceSets.main.output
 }

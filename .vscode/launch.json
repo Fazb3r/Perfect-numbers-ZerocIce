@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Maestro",
+            "request": "launch",
+            "mainClass": "Maestro",
+            "projectName": "numbers-ZerocIce",
+            "cwd": "${workspaceFolder}/maestro"
+        },
+        {
+            "type": "java",
+            "name": "Launch Cliente",
+            "request": "launch",
+            "mainClass": "Cliente", 
+            "projectName": "numbers-ZerocIce",
+            "cwd": "${workspaceFolder}/cliente"
+        },
+        {
+            "type": "java",
+            "name": "Launch Trabajador",
+            "request": "launch",
+            "mainClass": "Trabajador",
+            "projectName": "numbers-ZerocIce",
+            "args": ["1"],
+            "cwd": "${workspaceFolder}/trabajador"
+        }
+    ]
+}

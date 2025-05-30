@@ -11,12 +11,32 @@ allprojects {
     }
 }
 
+// Configure source sets to include generated ICE classes
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', '.']  // Include root directory
+            include 'NumbersApp/**/*.java'    // Include generated classes
+        }
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    
+    // Add the generated classes to each subproject's source sets
+    sourceSets {
+        main {
+            java {
+                srcDirs += rootProject.projectDir  // Include root directory
+                include 'NumbersApp/**/*.java'
+            }
+        }
     }
     
     dependencies {
@@ -35,10 +55,6 @@ subprojects {
 // Configuración específica para proyectos de aplicación
 configure(subprojects.findAll { it.name in ['maestro', 'cliente', 'trabajador'] }) {
     apply plugin: 'application'
-    
-    dependencies {
-        implementation project(':generated')
-    }
     
     run {
         standardInput = System.in
