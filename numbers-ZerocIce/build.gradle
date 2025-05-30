@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     // Ice dependencies
-    implementation 'com.zeroc:ice:3.7.10'
+    implementation group: 'com.zeroc', name: 'ice', version: '3.7.10'
 }
 
 application {
@@ -23,4 +23,8 @@ application {
 // This will use whatever Java version you have installed
 compileJava {
     options.encoding = 'UTF-8'
+}
+
+task generateSlice(type: Exec) {
+    commandLine 'slice2java', 'src/main/slice/numbers-ZerocIce.ice', '-d', 'src/main/java'
 }
