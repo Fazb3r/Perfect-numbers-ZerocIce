@@ -4,11 +4,11 @@
  * The settings file is used to specify which projects to include in your build.
  * For more detailed information on multi-project builds, please refer to https://docs.gradle.org/8.6/userguide/multi_project_builds.html in the Gradle documentation.
  */
+/*
+ * Multi-project build for ZeroC Ice Numbers Application
+ */
 rootProject.name = 'numbers-ZerocIce'
 
-include 'generated'
 include 'maestro' 
 include 'cliente'
-include 'trabajador' 
-include 'numbers-ZerocIce'
- // Note: should be 'trabajador', not 'trabajadores'
+include 'trabajadores' 

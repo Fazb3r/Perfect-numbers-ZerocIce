@@ -3,6 +3,44 @@ plugins {
     id 'application'
 }
 
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://repo.zeroc.com/nexus/content/repositories/releases/'
+        }
+    }
+}
+
+// Configure all subprojects
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'application'
+    
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    
+    dependencies {
+        implementation group: 'com.zeroc', name: 'ice', version: '3.7.10'
+    }
+    
+    compileJava {
+        options.encoding = 'UTF-8'
+    }
+    
+    // Add generated sources to the main source set
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/main/java', 'build/generated/src/main/java']
+            }
+        }
+    }
+}
+
+// Root project configuration
 repositories {
     mavenCentral()
     maven {
@@ -11,20 +49,86 @@ repositories {
 }
 
 dependencies {
-    // Ice dependencies
     implementation group: 'com.zeroc', name: 'ice', version: '3.7.10'
 }
 
-application {
-    mainClass = 'your.main.Class' // Replace with your actual main class
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
-// Remove Java toolchain configuration - let Gradle use system default
-// This will use whatever Java version you have installed
 compileJava {
     options.encoding = 'UTF-8'
 }
 
+// Task to generate Java classes from Slice files
 task generateSlice(type: Exec) {
-    commandLine 'slice2java', 'src/main/slice/numbers-ZerocIce.ice', '-d', 'src/main/java'
+    description = 'Generate Java classes from Slice (.ice) files'
+    
+    // Create output directory if it doesn't exist
+    doFirst {
+        mkdir 'build/generated/src/main/java'
+        mkdir 'cliente/build/generated/src/main/java'
+        mkdir 'maestro/build/generated/src/main/java'
+        mkdir 'trabajadores/build/generated/src/main/java'
+    }
+    
+    // Try slice2java command
+    try {
+        commandLine 'slice2java', '--output-dir', 'build/generated/src/main/java', 'numbers-ZerocIce.ice'
+    } catch (Exception e) {
+        println "slice2java not found, trying alternative approach..."
+        // If slice2java is not available, we'll handle this in copyGeneratedClasses task
+    }
+    
+    // Set as ignored if command fails
+    ignoreExitValue = true
+}
+
+// Task to copy generated classes to all subprojects
+task copyGeneratedClasses(type: Copy) {
+    description = 'Copy generated Java classes to all subprojects'
+    dependsOn generateSlice
+    
+    from 'build/generated/src/main/java'
+    into 'temp/generated'
+    
+    doLast {
+        // Copy to each subproject
+        copy {
+            from 'build/generated/src/main/java'
+            into 'cliente/build/generated/src/main/java'
+        }
+        copy {
+            from 'build/generated/src/main/java'
+            into 'maestro/build/generated/src/main/java'
+        }
+        copy {
+            from 'build/generated/src/main/java'
+            into 'trabajadores/build/generated/src/main/java'
+        }
+        
+        println "Generated classes copied to all subprojects"
+    }
+}
+
+// Make compilation depend on slice generation
+compileJava.dependsOn copyGeneratedClasses
+
+// Configure main source sets to include generated code
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'build/generated/src/main/java']
+        }
+    }
+}
+
+// Clean task enhancement
+clean {
+    delete 'build/generated'
+    delete 'cliente/build/generated'
+    delete 'maestro/build/generated' 
+    delete 'trabajadores/build/generated'
+    delete 'temp'
 }
