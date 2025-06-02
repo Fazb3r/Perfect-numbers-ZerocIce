@@ -18,16 +18,16 @@ public class Cliente {
             MasterPrx maestro = MasterPrx.checkedCast(base);
             
             if (maestro == null) {
-                System.err.println("Error: No se pudo conectar con el Maestro");
-                System.err.println("Verifique que el servidor Master este ejecutandose en el puerto 10000");
+                System.err.println("Error: No se pudo establecer la conexion con el Maestro");
+                System.err.println("debe verificar que el servidor Master este ejecutandose en el puerto 10000");
                 return;
             }
             
             // Verificar conexión con una llamada de prueba
             try {
                 maestro.ice_ping();
-                System.out.println("=== CLIENTE DE BUSQUEDA DE NUMEROS PERFECTOS ===");
-                System.out.println("Conectado al Maestro exitosamente");
+                System.out.println("=== CLIENTE PARA BUSQUEDA DE NUMEROS PERFECTOS ===");
+                System.out.println("Cliente conectado al Maestro exitosamente");
             } catch (com.zeroc.Ice.Exception e) {
                 System.err.println("Error: No se pudo establecer conexion con el Maestro");
                 System.err.println("Detalle del error: " + e.getMessage());
@@ -39,6 +39,7 @@ public class Cliente {
                 try {
                     // Solicitar rango al usuario
                     System.out.println("\n--- Nueva Busqueda ---");
+                    System.out.print("Debe ingresar el rango donde desea buscar los numeros perfectos (0 para salir): \n");
                     System.out.print("Ingrese el numero inicial del rango (0 para salir): ");
                     
                     int inicio;
@@ -73,7 +74,7 @@ public class Cliente {
                     
                     // Validar rango
                     if (inicio < 1 || fin < inicio) {
-                        System.out.println("Error: Rango invalido. El inicio debe ser >= 1 y fin >= inicio");
+                        System.out.println("Error: Rango invalido. El inicio debe ser >= 1 y el fin debe ser >= al inicio");
                         continue;
                     }
                     
@@ -105,9 +106,9 @@ public class Cliente {
                 } catch (com.zeroc.Ice.Exception e) {
                     System.err.println("Error ICE durante el procesamiento: " + e.getMessage());
                     System.err.println("Error: Problema de conexion con el servidor Master");
-                    System.err.println("Verifique que el servidor Master este ejecutandose en el puerto 10000");
+                    System.err.println("Verifique que el servidor Master se este ejecutandose en el puerto 10000");
                     
-                    System.out.print("¿Desea intentar nuevamente? (s/n): ");
+                    System.out.print("¿Desea intentar nuevamente? (Si:s o No:n): ");
                     try {
                         scanner.nextLine(); // Limpiar buffer
                         String respuesta = scanner.nextLine();
@@ -125,7 +126,7 @@ public class Cliente {
                         System.err.println("Error: Problema de conexion con el servidor Master");
                         System.err.println("Verifique que el servidor Master este ejecutandose en el puerto 10000");
                         
-                        System.out.print("¿Desea intentar nuevamente? (s/n): ");
+                        System.out.print("¿Desea intentar nuevamente? (Si:s o No:n): ");
                         try {
                             scanner.nextLine(); // Limpiar buffer
                             String respuesta = scanner.nextLine();

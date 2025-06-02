@@ -42,8 +42,8 @@ public class Trabajador implements Worker {
         System.out.println("Trabajador " + workerId + " completo el procesamiento");
         System.out.println("Numeros perfectos encontrados: " + numerosPerfectos);
         System.out.println("Cantidad: " + numerosPerfectos.size());
-        System.out.println("Suma total: " + resultado);
-        System.out.println("Tiempo: " + (endTime - startTime) + " ms");
+        System.out.println("Suma total de los numeros perfectos: " + resultado);
+        System.out.println("Tiempo de ejecución: " + (endTime - startTime) + " ms");
 
     } catch (java.lang.Exception e) {
         System.err.println("Error durante el procesamiento: " + e.getMessage());
@@ -72,7 +72,7 @@ public class Trabajador implements Worker {
     private List<Integer> buscarNumerosPerfectos(int inicio, int fin) {
         List<Integer> numerosPerfectos = new ArrayList<>();
         
-        System.out.println("Buscando numeros perfectos en rango [" + inicio + ", " + fin + "]");
+        System.out.println("Buscando numeros perfectos en el rango [" + inicio + ", " + fin + "]");
         
         for (int i = inicio; i <= fin; i++) {
             if (esNumeroPerfecto(i)) {
@@ -80,7 +80,7 @@ public class Trabajador implements Worker {
                 System.out.println("¡Numero perfecto encontrado: " + i + "!");
             }
             
-            // Mostrar progreso cada 1000 números para rangos grandes
+            // para rangos grandes se muetsra el progreso cada mil numeros
             if (i % 1000 == 0 && i > inicio) {
                 System.out.println("Progreso: verificando numero " + i + "...");
             }
@@ -179,7 +179,7 @@ public class Trabajador implements Worker {
             adapter.activate();
             
             System.out.println("=== TRABAJADOR " + workerId + " INICIADO ===");
-            System.out.println("Escuchando en puerto " + puerto);
+            System.out.println("Escuchando en el puerto " + puerto);
             System.out.println("Especializado en busqueda de NÚMEROS PERFECTOS");
             
             // Registrarse con el maestro
@@ -206,14 +206,14 @@ public class Trabajador implements Worker {
                     System.err.println("No se pudo conectar con el Maestro");
                 }
             } catch (com.zeroc.Ice.Exception e) {
-                System.err.println("Error ICE al registrarse con el Maestro: " + e.getMessage());
+                System.err.println("Ocurrio un error ICE al registrarse con el Maestro: " + e.getMessage());
                 System.out.println("El trabajador continuara ejecutandose, pero no estará registrado");
             } catch (java.lang.Exception e) {
                 System.err.println("Error general al registrarse con el Maestro: " + e.getMessage());
                 System.out.println("El trabajador continuara ejecutandose, pero no estara registrado");
             }
             
-            System.out.println("Trabajador listo para recibir tareas de busqueda de numeros perfectos...");
+            System.out.println("El trabajador esta listo para recibir un rango de busqueda de numeros perfectos...");
             
             // Esperar hasta que se cierre el comunicador
             communicator.waitForShutdown();

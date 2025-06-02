@@ -11,7 +11,8 @@ public class Maestro implements Master {
     
     public Maestro() {
         this.trabajadores = new ConcurrentHashMap<>();
-        System.out.println("Maestro inicializado - Esperando trabajadores y clientes...");
+        System.out.println("MAESTRO INICIADO");
+        System.out.println("Esperando que trabajadores y clientes se conecten...");
     }
     
     @Override
@@ -21,7 +22,7 @@ public class Maestro implements Master {
             trabajadores.put(workerId, worker);
             
             System.out.println("Trabajador registrado con ID: " + workerId);
-            System.out.println("Total de trabajadores activos: " + trabajadores.size());
+            System.out.println("Total de trabajadores activos hasta el momento: " + trabajadores.size());
             
         } catch (java.lang.Exception e) {
             System.err.println("Error al registrar trabajador: " + e.getMessage());
@@ -31,10 +32,10 @@ public class Maestro implements Master {
     @Override
     public void unregisterWorker(int workerId, Current current) {
         if (trabajadores.remove(workerId) != null) {
-            System.out.println("Trabajador " + workerId + " desregistrado");
+            System.out.println("El trabajador " + workerId + " se ha desconectado");
             System.out.println("Total de trabajadores activos: " + trabajadores.size());
         } else {
-            System.out.println("Trabajador " + workerId + " no estaba registrado");
+            System.out.println("Trabajador " + workerId + " no esta registrado");
         }
     }
     
@@ -50,16 +51,16 @@ public class Maestro implements Master {
             throw new RangeError(error);
         }
         
-        // Verificar que hay trabajadores disponibles
+        // Verificar si hay trabajadores disponibles
         if (trabajadores.isEmpty()) {
             String error = "No hay trabajadores disponibles para procesar la solicitud";
             System.err.println("Error: " + error);
             throw new RangeError(error);
         }
         
-        System.out.println("Dividiendo trabajo entre " + trabajadores.size() + " trabajadores...");
+        System.out.println("Dividiendo el rango de trabajo entre " + trabajadores.size() + " trabajadores...");
         
-        // Dividir el rango entre los trabajadores disponibles
+        // se divide el rango entre los trabajadores disponibles
         List<WorkerPrx> trabajadoresActivos = new ArrayList<>(trabajadores.values());
         int numTrabajadores = trabajadoresActivos.size();
         int rangoTotal = endNum - startNum + 1;
@@ -82,20 +83,18 @@ public class Maestro implements Master {
             }
             
             try {
-                System.out.println("Asignando rango [" + inicioActual + ", " + finActual + "] al trabajador " + (i + 1));
+                System.out.println("Asignando el rango [" + inicioActual + ", " + finActual + "] al trabajador " + (i + 1));
                 
                 // Enviar trabajo al trabajador
                 long resultadoParcial = trabajador.processRange(inicioActual, finActual);
                 resultadoTotal += resultadoParcial;
                 
-                System.out.println("Trabajador " + (i + 1) + " completo su tarea. Resultado parcial: " + resultadoParcial);
+                System.out.println("El trabajador " + (i + 1) + " completo su tarea. su Resultado parcial es: " + resultadoParcial);
                 
             } catch (com.zeroc.Ice.Exception e) {
                 System.err.println("Error ICE al comunicarse con trabajador " + (i + 1) + ": " + e.getMessage());
-                // En una implementación más robusta, se podría reasignar el trabajo
             } catch (java.lang.Exception e) {
                 System.err.println("Error general al comunicarse con trabajador " + (i + 1) + ": " + e.getMessage());
-                // En una implementación más robusta, se podría reasignar el trabajo
             }
             
             inicioActual = finActual + 1;
@@ -143,7 +142,8 @@ public class Maestro implements Master {
             
             System.out.println("=== MAESTRO INICIADO ===");
             System.out.println("Escuchando en puerto 10000...");
-            System.out.println("Esperando conexiones de trabajadores y clientes...");
+            System.out.println("Esperando que trabajadores y clientes se conecten...");
+            
             
             communicator.waitForShutdown();
             
