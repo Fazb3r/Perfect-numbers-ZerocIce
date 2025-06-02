@@ -16,7 +16,7 @@ public class Trabajador implements Worker {
     
     @Override
     public long processRange(int startNum, int endNum, Current current) {
-    System.out.println("\n=== TRABAJADOR " + workerId + " RECIBIÓ TAREA ===");
+    System.out.println("\n=== TRABAJADOR " + workerId + " RECIBIO TAREA ===");
     System.out.println("Subrango asignado: [" + startNum + ", " + endNum + "]");
     System.out.println("Procesando subrango...");
 
@@ -39,8 +39,8 @@ public class Trabajador implements Worker {
         }
 
         long endTime = System.currentTimeMillis();
-        System.out.println("Trabajador " + workerId + " completó el procesamiento");
-        System.out.println("Números perfectos encontrados: " + numerosPerfectos);
+        System.out.println("Trabajador " + workerId + " completo el procesamiento");
+        System.out.println("Numeros perfectos encontrados: " + numerosPerfectos);
         System.out.println("Cantidad: " + numerosPerfectos.size());
         System.out.println("Suma total: " + resultado);
         System.out.println("Tiempo: " + (endTime - startTime) + " ms");
@@ -72,17 +72,17 @@ public class Trabajador implements Worker {
     private List<Integer> buscarNumerosPerfectos(int inicio, int fin) {
         List<Integer> numerosPerfectos = new ArrayList<>();
         
-        System.out.println("Buscando números perfectos en rango [" + inicio + ", " + fin + "]");
+        System.out.println("Buscando numeros perfectos en rango [" + inicio + ", " + fin + "]");
         
         for (int i = inicio; i <= fin; i++) {
             if (esNumeroPerfecto(i)) {
                 numerosPerfectos.add(i);
-                System.out.println("¡Número perfecto encontrado: " + i + "!");
+                System.out.println("¡Numero perfecto encontrado: " + i + "!");
             }
             
             // Mostrar progreso cada 1000 números para rangos grandes
             if (i % 1000 == 0 && i > inicio) {
-                System.out.println("Progreso: verificando número " + i + "...");
+                System.out.println("Progreso: verificando numero " + i + "...");
             }
         }
         
@@ -142,7 +142,7 @@ public class Trabajador implements Worker {
         if (esNumeroPerfecto(numero)) {
             List<Integer> divisores = obtenerDivisores(numero);
             int suma = divisores.stream().mapToInt(Integer::intValue).sum();
-            System.out.println("Número " + numero + " es perfecto:");
+            System.out.println("Numero " + numero + " es perfecto:");
             System.out.println("  Divisores propios: " + divisores);
             System.out.println("  Suma de divisores: " + suma);
         }
@@ -158,7 +158,7 @@ public class Trabajador implements Worker {
                 try {
                     workerId = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    System.out.println("ID inválido, usando ID por defecto: " + workerId);
+                    System.out.println("ID invalido, usando ID por defecto: " + workerId);
                 }
             }
             
@@ -180,7 +180,7 @@ public class Trabajador implements Worker {
             
             System.out.println("=== TRABAJADOR " + workerId + " INICIADO ===");
             System.out.println("Escuchando en puerto " + puerto);
-            System.out.println("Especializado en búsqueda de NÚMEROS PERFECTOS");
+            System.out.println("Especializado en busqueda de NÚMEROS PERFECTOS");
             
             // Registrarse con el maestro
             try {
@@ -196,7 +196,7 @@ public class Trabajador implements Worker {
                     System.out.println("Registrado exitosamente con el Maestro");
                     
                     // Mostrar algunos números perfectos conocidos para referencia
-                    System.out.println("\nNúmeros perfectos conocidos:");
+                    System.out.println("\nNumeros perfectos conocidos:");
                     System.out.println("- 6 (1+2+3=6)");
                     System.out.println("- 28 (1+2+4+7+14=28)");
                     System.out.println("- 496 (suma de divisores propios)");
@@ -207,13 +207,13 @@ public class Trabajador implements Worker {
                 }
             } catch (com.zeroc.Ice.Exception e) {
                 System.err.println("Error ICE al registrarse con el Maestro: " + e.getMessage());
-                System.out.println("El trabajador continuará ejecutándose, pero no estará registrado");
+                System.out.println("El trabajador continuara ejecutándose, pero no estará registrado");
             } catch (java.lang.Exception e) {
                 System.err.println("Error general al registrarse con el Maestro: " + e.getMessage());
-                System.out.println("El trabajador continuará ejecutándose, pero no estará registrado");
+                System.out.println("El trabajador continuara ejecutandose, pero no estara registrado");
             }
             
-            System.out.println("Trabajador listo para recibir tareas de búsqueda de números perfectos...");
+            System.out.println("Trabajador listo para recibir tareas de busqueda de numeros perfectos...");
             
             // Esperar hasta que se cierre el comunicador
             communicator.waitForShutdown();
