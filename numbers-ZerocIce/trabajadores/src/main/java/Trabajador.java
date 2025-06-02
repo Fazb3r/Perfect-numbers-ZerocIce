@@ -22,9 +22,9 @@ public class Trabajador implements Worker {
 
     // Validar rango
     if (startNum < 1 || endNum < startNum) {
-        String error = "Rango inválido: inicio=" + startNum + ", fin=" + endNum;
+        String error = "Rango invalido: inicio=" + startNum + ", fin=" + endNum;
         System.err.println("Error: " + error);
-        throw new RuntimeException(error);  // O crea tu excepción personalizada
+        throw new RuntimeException(error);
     }
 
     disponible = false;
@@ -51,7 +51,7 @@ public class Trabajador implements Worker {
         disponible = true;
     }
 
-    return resultado;  // ¡Esto es lo más importante!
+    return resultado;
 }
 
 
@@ -207,7 +207,7 @@ public class Trabajador implements Worker {
                 }
             } catch (com.zeroc.Ice.Exception e) {
                 System.err.println("Error ICE al registrarse con el Maestro: " + e.getMessage());
-                System.out.println("El trabajador continuara ejecutándose, pero no estará registrado");
+                System.out.println("El trabajador continuara ejecutandose, pero no estará registrado");
             } catch (java.lang.Exception e) {
                 System.err.println("Error general al registrarse con el Maestro: " + e.getMessage());
                 System.out.println("El trabajador continuara ejecutandose, pero no estara registrado");

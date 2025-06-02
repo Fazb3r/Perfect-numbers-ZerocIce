@@ -88,7 +88,7 @@ public class Maestro implements Master {
                 long resultadoParcial = trabajador.processRange(inicioActual, finActual);
                 resultadoTotal += resultadoParcial;
                 
-                System.out.println("Trabajador " + (i + 1) + " completó su tarea. Resultado parcial: " + resultadoParcial);
+                System.out.println("Trabajador " + (i + 1) + " completo su tarea. Resultado parcial: " + resultadoParcial);
                 
             } catch (com.zeroc.Ice.Exception e) {
                 System.err.println("Error ICE al comunicarse con trabajador " + (i + 1) + ": " + e.getMessage());
@@ -136,18 +136,15 @@ public class Maestro implements Master {
                 "MasterAdapter", "default -p 10000"
             );
             
-            // Crear e instalar el servant del maestro
             Maestro maestro = new Maestro();
             adapter.add(maestro, Util.stringToIdentity("Master"));
             
-            // Activar el adapter
             adapter.activate();
             
             System.out.println("=== MAESTRO INICIADO ===");
             System.out.println("Escuchando en puerto 10000...");
             System.out.println("Esperando conexiones de trabajadores y clientes...");
             
-            // Esperar hasta que se cierre el comunicador
             communicator.waitForShutdown();
             
         } catch (com.zeroc.Ice.Exception e) {
