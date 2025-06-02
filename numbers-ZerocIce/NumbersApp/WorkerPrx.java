@@ -18,26 +18,13 @@ package NumbersApp;
 public interface WorkerPrx extends com.zeroc.Ice.ObjectPrx
 {
     default long processRange(int startNum, int endNum)
-        throws RangeError
     {
         return processRange(startNum, endNum, com.zeroc.Ice.ObjectPrx.noExplicitContext);
     }
 
     default long processRange(int startNum, int endNum, java.util.Map<String, String> context)
-        throws RangeError
     {
-        try
-        {
-            return _iceI_processRangeAsync(startNum, endNum, context, true).waitForResponseOrUserEx();
-        }
-        catch(RangeError ex)
-        {
-            throw ex;
-        }
-        catch(com.zeroc.Ice.UserException ex)
-        {
-            throw new com.zeroc.Ice.UnknownUserException(ex.ice_id(), ex);
-        }
+        return _iceI_processRangeAsync(startNum, endNum, context, true).waitForResponse();
     }
 
     default java.util.concurrent.CompletableFuture<java.lang.Long> processRangeAsync(int startNum, int endNum)
@@ -60,7 +47,7 @@ public interface WorkerPrx extends com.zeroc.Ice.ObjectPrx
      **/
     default com.zeroc.IceInternal.OutgoingAsync<java.lang.Long> _iceI_processRangeAsync(int iceP_startNum, int iceP_endNum, java.util.Map<String, String> context, boolean sync)
     {
-        com.zeroc.IceInternal.OutgoingAsync<java.lang.Long> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "processRange", null, sync, _iceE_processRange);
+        com.zeroc.IceInternal.OutgoingAsync<java.lang.Long> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "processRange", null, sync, null);
         f.invoke(true, context, null, ostr -> {
                      ostr.writeInt(iceP_startNum);
                      ostr.writeInt(iceP_endNum);
@@ -71,12 +58,6 @@ public interface WorkerPrx extends com.zeroc.Ice.ObjectPrx
                  });
         return f;
     }
-
-    /** @hidden */
-    static final Class<?>[] _iceE_processRange =
-    {
-        RangeError.class
-    };
 
     default int getWorkerId()
     {

@@ -7,7 +7,7 @@ module NumbersApp
     
     interface Worker
     {
-        long processRange(int startNum, int endNum) throws RangeError;
+        long processRange(int startNum, int endNum);
         int getWorkerId();
         bool isAvailable();
     };

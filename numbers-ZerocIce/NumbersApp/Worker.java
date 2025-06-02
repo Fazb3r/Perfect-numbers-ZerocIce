@@ -17,8 +17,7 @@ package NumbersApp;
 
 public interface Worker extends com.zeroc.Ice.Object
 {
-    long processRange(int startNum, int endNum, com.zeroc.Ice.Current current)
-        throws RangeError;
+    long processRange(int startNum, int endNum, com.zeroc.Ice.Current current);
 
     int getWorkerId(com.zeroc.Ice.Current current);
 
@@ -54,10 +53,8 @@ public interface Worker extends com.zeroc.Ice.Object
      * @param inS -
      * @param current -
      * @return -
-     * @throws com.zeroc.Ice.UserException -
     **/
     static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_processRange(Worker obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
-        throws com.zeroc.Ice.UserException
     {
         com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
         com.zeroc.Ice.InputStream istr = inS.startReadParams();

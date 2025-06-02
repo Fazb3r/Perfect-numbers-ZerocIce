@@ -15,46 +15,46 @@ public class Trabajador implements Worker {
     }
     
     @Override
-    public long processRange(int startNum, int endNum, Current current) throws RangeError {
-        System.out.println("\n=== TRABAJADOR " + workerId + " PROCESANDO ===");
-        System.out.println("Rango asignado: [" + startNum + ", " + endNum + "]");
-        
-        // Validar rango
-        if (startNum < 1 || endNum < startNum) {
-            String error = "Rango inválido: inicio=" + startNum + ", fin=" + endNum;
-            System.err.println("Error: " + error);
-            throw new RangeError(error);
-        }
-        
-        disponible = false;
-        long startTime = System.currentTimeMillis();
-        
-        try {
-            // Buscar números perfectos en el rango
-            List<Integer> numerosPerfectos = buscarNumerosPerfectos(startNum, endNum);
-            
-            // Calcular resultado: suma de todos los números perfectos encontrados
-            long resultado = 0;
-            for (int numeroPerfecto : numerosPerfectos) {
-                resultado += numeroPerfecto;
-            }
-            
-            long endTime = System.currentTimeMillis();
-            System.out.println("Trabajador " + workerId + " completó el procesamiento");
-            System.out.println("Números perfectos encontrados: " + numerosPerfectos);
-            System.out.println("Cantidad: " + numerosPerfectos.size());
-            System.out.println("Suma total: " + resultado);
-            System.out.println("Tiempo: " + (endTime - startTime) + " ms");
-            
-            return resultado;
-            
-        } catch (java.lang.Exception e) {
-            System.err.println("Error durante el procesamiento: " + e.getMessage());
-            throw new RangeError("Error interno del trabajador: " + e.getMessage());
-        } finally {
-            disponible = true;
-        }
+    public long processRange(int startNum, int endNum, Current current) {
+    System.out.println("\n=== TRABAJADOR " + workerId + " RECIBIÓ TAREA ===");
+    System.out.println("Subrango asignado: [" + startNum + ", " + endNum + "]");
+    System.out.println("Procesando subrango...");
+
+    // Validar rango
+    if (startNum < 1 || endNum < startNum) {
+        String error = "Rango inválido: inicio=" + startNum + ", fin=" + endNum;
+        System.err.println("Error: " + error);
+        throw new RuntimeException(error);  // O crea tu excepción personalizada
     }
+
+    disponible = false;
+    long startTime = System.currentTimeMillis();
+    long resultado = 0;
+
+    try {
+        List<Integer> numerosPerfectos = buscarNumerosPerfectos(startNum, endNum);
+
+        for (int numeroPerfecto : numerosPerfectos) {
+            resultado += numeroPerfecto;
+        }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Trabajador " + workerId + " completó el procesamiento");
+        System.out.println("Números perfectos encontrados: " + numerosPerfectos);
+        System.out.println("Cantidad: " + numerosPerfectos.size());
+        System.out.println("Suma total: " + resultado);
+        System.out.println("Tiempo: " + (endTime - startTime) + " ms");
+
+    } catch (java.lang.Exception e) {
+        System.err.println("Error durante el procesamiento: " + e.getMessage());
+    } finally {
+        disponible = true;
+    }
+
+    return resultado;  // ¡Esto es lo más importante!
+}
+
+
     
     @Override
     public int getWorkerId(Current current) {
