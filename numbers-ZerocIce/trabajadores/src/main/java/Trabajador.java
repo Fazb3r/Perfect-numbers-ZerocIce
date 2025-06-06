@@ -186,7 +186,8 @@ public class Trabajador implements Worker {
             
             // Registrarse con el maestro
             try {
-                ObjectPrx base = communicator.stringToProxy("Master:default -p 10000");
+                //ObjectPrx base = communicator.stringToProxy("Master:default -p 10000");
+                ObjectPrx base = communicator.stringToProxy("Master:tcp -h 192.168.131.22 -p 10000");
                 MasterPrx maestro = MasterPrx.checkedCast(base);
                 
                 if (maestro != null) {

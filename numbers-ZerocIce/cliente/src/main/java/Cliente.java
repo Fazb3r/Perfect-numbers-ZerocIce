@@ -14,7 +14,8 @@ public class Cliente {
             communicator = Util.initialize(args);
             
             // Crear proxy del maestro
-            ObjectPrx base = communicator.stringToProxy("Master:default -p 10000");
+            // tcp, la ip == referencia al master, depende del computador que este corriendo esa vaina
+            ObjectPrx base = communicator.stringToProxy("Master:tcp -h 192.168.131.22 -p 10000");
             MasterPrx maestro = MasterPrx.checkedCast(base);
             
             if (maestro == null) {

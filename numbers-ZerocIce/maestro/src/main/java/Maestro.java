@@ -131,8 +131,12 @@ public class Maestro implements Master {
             communicator = Util.initialize(args);
             
             // Crear el adapter para el maestro
+            //ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints(
+             //   "MasterAdapter", "default -p $10000"
+            //);
+
             ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints(
-                "MasterAdapter", "default -p 10000"
+                "MasterAdapter", "tcp -h 192.168.131.22 -p 10000"
             );
             
             Maestro maestro = new Maestro();
