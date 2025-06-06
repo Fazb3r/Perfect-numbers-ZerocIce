@@ -56,22 +56,22 @@ Deberías ver:
     Maestro iniciado, esperando conexiones de trabajadores y clientes...
     ```
 
----
 
 ### 3. **Ejecutar los trabajadores**
-Ejecuta los Trabajadores en una segunda terminal:
+Ejecuta los Trabajadores en una segunda terminal(puedes abrir varias terminales para simular varios Trabajadores):
 
-    ```
-    gradle :trabajadores:run
-    ```
+   ```
+   gradle :trabajadores:run
+   ```
 
     
 ### 4. **Ejecutar un cliente**
 En una terminal diferente (puedes abrir varias terminales para simular varios clientes), ejecuta el **Cliente**:
 
-    ```
-    gradle :cliente:run
-    ---
+   ```
+   gradle :cliente:run
+   ```
+
 Se te pedirá ingresar el rango para la búsqueda de números perfectos:
 
 ```

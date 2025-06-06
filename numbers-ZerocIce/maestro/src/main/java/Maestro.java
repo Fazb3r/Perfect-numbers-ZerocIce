@@ -12,7 +12,7 @@ public class Maestro implements Master {
     public Maestro() {
         this.trabajadores = new ConcurrentHashMap<>();
         System.out.println("MAESTRO INICIADO");
-        System.out.println("Esperando que trabajadores y clientes se conecten...");
+        System.out.println("Esperando que trabajadores y clientes se conecten...\n");
     }
     
     @Override

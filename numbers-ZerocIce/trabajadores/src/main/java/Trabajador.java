@@ -11,14 +11,16 @@ public class Trabajador implements Worker {
     public Trabajador(int id) {
         this.workerId = id;
         this.disponible = true;
-        System.out.println("Trabajador " + workerId + " inicializado");
+        System.out.println("=== INICIANDO TRABAJADOR " + workerId + " ===");
+        System.out.println("Trabajador " + workerId + " ha sido inicializado y está listo para procesar\n");
+
     }
     
     @Override
     public long processRange(int startNum, int endNum, Current current) {
     System.out.println("\n=== TRABAJADOR " + workerId + " RECIBIO TAREA ===");
     System.out.println("Subrango asignado: [" + startNum + ", " + endNum + "]");
-    System.out.println("Procesando subrango...");
+    System.out.println("Iniciando el procesamiento del rango...\n");
 
     // Validar rango
     if (startNum < 1 || endNum < startNum) {
