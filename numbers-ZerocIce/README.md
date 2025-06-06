@@ -10,13 +10,13 @@ Este proyecto implementa un sistema distribuido basado en **ICE** (Internet Comm
 ```
 PerfectNumbersDistributed/
 │
-├── maestro/
+├── maestro/src
 │   └── Maestro.java
 │
-├── trabajador/
+├── trabajador/src
 │   └── Trabajador.java
 │
-├── cliente/
+├── cliente/src
 │   └── Cliente.java
 │
 ├── numbers-ZerocIce.ice
@@ -34,55 +34,44 @@ PerfectNumbersDistributed/
 - Compilador `javac` y ejecutor `java` configurados en tu `PATH`
 
 ---
-
 ## ▶️ Instrucciones para ejecutar
 
-### 1. Compilar las interfaces Slice
+Para ejecutar el sistema completo distribuido, sigue estos pasos:
 
-Primero, debes compilar los archivos **Slice** generados por ICE. Dirígete al directorio donde se encuentra el archivo **`numbers-ZerocIce.ice`** y ejecuta:
+### 1. **Compilacion del proyecto**
 
-```bash
-slice2java -I. numbers-ZerocIce.ice --output-dir ./src/main/java
-```
+Compila el proyecto ejecutando el siguiente comando en la terminal:
 
-Esto generará las clases necesarias para las interfaces ICE en el directorio `./src/main/java`.
+   ```
+   gradle build
+   ```
 
----
-
-### 2. Compilar los archivos Java
-
-Desde la raíz del proyecto, compila los archivos Java:
-
-```bash
-javac -d bin maestro/*.java trabajador/*.java cliente/*.java
-```
-
----
-
-### 3. Ejecutar el servidor (Maestro)
-
-En una terminal nueva, ejecuta el **Maestro** con el siguiente comando:
-
-```bash
-java -cp bin Maestro
-```
-
+### 2. Ejecutar el servidor (Maestro):
+En la primera terminal, ejecuta el **Maestro** con el siguiente comando:
+   ```
+   gradle :maestro:run
+   ```
 Deberías ver:
-
-```
-Maestro iniciado, esperando conexiones de trabajadores y clientes...
-```
+    ```
+    Maestro iniciado, esperando conexiones de trabajadores y clientes...
+    ```
 
 ---
 
-### 4. Ejecutar un cliente
+### 3. **Ejecutar los trabajadores**
+Ejecuta los Trabajadores en una segunda terminal:
 
+    ```
+    gradle :trabajadores:run
+    ```
+
+    
+### 4. **Ejecutar un cliente**
 En una terminal diferente (puedes abrir varias terminales para simular varios clientes), ejecuta el **Cliente**:
 
-```bash
-java -cp bin Cliente
-```
-
+    ```
+    gradle :cliente:run
+    ---
 Se te pedirá ingresar el rango para la búsqueda de números perfectos:
 
 ```
@@ -91,6 +80,7 @@ Ingrese el número final del rango: 1000
 ```
 
 El cliente enviará la solicitud al Maestro y mostrará el resultado de los números perfectos encontrados.
+
 
 ---
 
